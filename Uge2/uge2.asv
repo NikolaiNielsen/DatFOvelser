@@ -1,0 +1,10 @@
+clear all
+a = 1
+b = 2
+c = 1
+
+disc = sqrt(b^2-4*a*c);
+if isreal(disc)
+	x1 = (-b + disc)/(2*a)
+	x2 = (-b - disc
+end
