@@ -10,7 +10,7 @@ function acc = accvec(m,rv,rl)
 	global G
 	for i = 1:length(m)
 		% Vi starter med et 0
-		A = zeros(size(rv,2),1);
+		A = zeros(length(m),1);
 		for j = 1:size(rv,2)
 			% Hvis vi prøver at finde accelerationen fra den i'te vektor springer vi over
 			if i == j
@@ -21,5 +21,26 @@ function acc = accvec(m,rv,rl)
 		end
 		acc(:,i) = -G .* A;
 	end
-	
+
+
+
+% 	onesies = ones(size(rl,2),1);
+% 	rl2d = zeros(size(rv));
+% 	for i = 1:size(rl,2);
+% 		rl2d(:,:,i) = (onesies*rl(i,:))';
+% 	end
+% 	acc = rl2d;
+% 	for i = 1:length(m)
+% 		% Vi starter med et 0
+% 		A = zeros(size(rv,1),1);
+% 		for j = 1:size(rv,2)
+% 			% Hvis vi prøver at finde accelerationen fra den i'te vektor springer vi over
+% 			if i == j
+% 				continue
+% 			end
+% 		
+% 			A = A+(m(j).*rv(:,i,:)./(rl(i,:).^3));
+% 		end
+% 		acc(:,i) = -G .* A;
+% 	end
 end
