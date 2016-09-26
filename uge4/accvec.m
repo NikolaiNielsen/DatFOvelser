@@ -9,15 +9,15 @@ function acc = accvec(m,rv,rl)
 	
 	global G
 	for i = 1:length(m)
-		% Vi starter med et 0
-		A = zeros(length(m),1);
+		% Vi starter med et 0 for A. Dette er en 3x1 søjlevektor (ét element for hvert koordinat)
+		A = zeros(3,1);
 		for j = 1:size(rv,2)
 			% Hvis vi prøver at finde accelerationen fra den i'te vektor springer vi over
 			if i == j
 				continue
 			end
 		
-			A = A+(m(j).*rv(:,i,j)./(rl(i,j)^3));
+			A = A+(m(j).*rv(:,i,j)./(rl(i,j).^3));
 		end
 		acc(:,i) = -G .* A;
 	end
