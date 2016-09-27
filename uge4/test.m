@@ -33,4 +33,70 @@ global G
 G = 1;
 m = [1 2 3];
 acc = accvec(m,rv,rl);
-	
+
+% onesies = ones(size(rl,2),1);
+% rl2d = zeros(size(rv));
+% for i = 1:size(rl,2);
+% 	rl2d(:,:,i) = (onesies*rl(i,:))';
+% end
+% 
+% for i = 1:length(m)
+% 	% Vi starter med et 0
+% 	A = zeros(length(m),1);
+% 	for j = 1:size(rv,2)
+% 		% Hvis vi prøver at finde accelerationen fra den i'te vektor springer vi over
+% 		if i == j
+% 			continue
+% 		end
+% 
+% 		A = A+(m(j).*rv(:,i,:)./(rl2d(:,i,:).^3));
+% 	end
+% 	acc(:,i) = -G .* A;
+% end
+
+%% Accvec med Klaus' data
+
+clear all
+close all
+clc
+
+r = [1 2 3 4; 5 6 7 8; 0 9 8 1];
+m = [2 3 1 6];
+rv = rvec(r);
+rl = rvlen(rv);
+global G
+G = 2;
+acc = accvec(m,rv,rl);
+
+% for i = 1:length(m)
+% 		% Vi starter med et 0 for A. Dette er en 3x1 søjlevektor (ét element for hvert koordinat)
+% 		A = zeros(3,1);
+% 		for j = 1:size(rv,2)
+% 			% Hvis vi prøver at finde accelerationen fra den i'te vektor springer vi over
+% 			if i == j
+% 				continue
+% 			end
+% 		
+% 			A = A+(m(j).*rv(:,i,j)./(rl(i,j).^3));
+% 		end
+% 		acc(:,i) = -G .* A;
+% 	end
+
+
+%% Test af dtval.m
+
+clear all
+close all
+clc
+
+r = eye(3);% r(2,2) = 2; r(3,3) = 3;
+
+rv = rvec(r);
+rl = rvlen(rv);
+
+global G
+G = 1;
+m = [1 2 3];
+acc = accvec(m,rv,rl);
+adt = circshift(acc,[1,1]);
+dt = dtval(acc,adt);
