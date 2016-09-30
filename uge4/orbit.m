@@ -6,45 +6,46 @@ function [rt,nextsave] = orbit(r_init, v_init, m, t_end, dt_initial, graph_on_of
 	vnext = @(v,a,adt,dt) v+a.*dt + 1/2.*adt.*dt.^2;
 
 
-	i = 1								% tællevariabel
-	t = 0								% tidsvariabel
+	i = 1;								% tællevariabel
+	t = 0;								% tidsvariabel
 
 
 	% Initialisering af arrays og input af startværdier
-	r(:,:,i) = r_init;
-	rt(:,:,i) = r_init;
-	v(:,:,i) = v_init;
 	nextsave = n_plot
-	Adot(:,:,i) = zeros(3,size(r_init,2));
 	dt(1) = dt_initial;
-	dt(2) = dt_initial;
-
-	rv = rvec(r(:,:,end));
+	rv = rvec(r_init);
 	rl = rvlen(rv);
-	acc(:,:,i) = accvec(m,rv,rl);
+	acc(:,:,1) =  accvec(m,rv,rl);
+	Adot(:,:,1) = zeros(3,size(r_init,2));
+	v(:,:,1) = vnext(v_init,acc(:,:,1),Adot(:,:,1),dt(1));
 	
-	t = t+dt(end)
-	i = i+1
+	
+	r(:,:,1) = rnext(r_init,v(:,:,1),acc(:,:,1),Adot(:,:,1),dt(1));
+	rt(:,:,1) = r(:,:,1); 
+	
+	t = t+dt(end);
+	i = i+1;
 
 	while t <= t_end
-
-		r(:,:,end+1) = rnext(r(:,:,end),v(:,:,end),acc(:,:,end),Adot(:,:,end),dt(end));
-
 		rv = rvec(r(:,:,end));
 		rl = rvlen(rv);
 		acc(:,:,end+1) = accvec(m,rv,rl);
-		Adot(:,:,end+1) = (acc(:,:,end)-acc(:,:,end-1))./dt(end-1);
+		Adot(:,:,end+1) = (acc(:,:,end)-acc(:,:,end-1))./(dt(end));
 		dt(end+1) = dtval(acc(:,:,end),Adot(:,:,end));
 		v(:,:,end+1) = vnext(v(:,:,end),acc(:,:,end),Adot(:,:,end),dt(end));
+		
+		r(:,:,end+1) = rnext(r(:,:,end),v(:,:,end),acc(:,:,end),Adot(:,:,end),dt(end));
+
+		
 
 		% Hvis det er tid til at gemme, så gemmes der (sker hvert n_plot tidsskridt)
 		if i >= nextsave
 			rt(:,:,end+1) = r(:,:,end); 
-			nextsave = nextsave+n_plot
+			nextsave = nextsave+n_plot;
 		end
 
-		t = t + dt(end)
-		i = i+1
+		t = t + dt(end);
+		i = i+1;
 	end
 
 end

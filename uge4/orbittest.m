@@ -74,7 +74,7 @@ global G
 r_init = [1 -2 1; 3 -1 -1; 0 0 0];	% Objekternes startpositioner
 v_init = [0 0 0; 0 0 0; 0 0 0];		% objekternes starthastigheder
 m = [3 4 5];						% Masserne af objekterne
-t_end = 200;							% Sluttiden
+t_end = 2;							% Sluttiden
 dt_initial = 5e-2 ;					% Det første tidsskridt
 graph_on_off = false;				% Om der skal plottes eller ej
 n_plot = 1;						% Antal tidsskridt per plot
