@@ -35,7 +35,7 @@ function pos = read_orbit(fil)
 	end
 	pos(1,:,:) = x';
 	pos(2,:,:) = y';
-	pos(3,:,:) = x';
+	pos(3,:,:) = z';
 % 
 % 	figure
 % 	hold on
