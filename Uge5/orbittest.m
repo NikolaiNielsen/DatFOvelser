@@ -99,13 +99,13 @@ ylabel('y')
 
 
 % Så skal der sgu gemmes datafiler!
-[numpoints,numobjects] = size(xplot); 
-fileID = fopen('poo.txt','w');
-fprintf(fileID,'%d',numobjects);
-formspec = '%e,%e,%e,%e,%e,%e,%e,%e,%e\n';
-for i = 1:100
-	fprintf(fileID,formspec,xplot(i,1),yplot(i,1),zplot(i,1),...
-							xplot(i,2),yplot(i,2),zplot(i,2),...
-							xplot(i,3),yplot(i,3),zplot(i,3));
-end
-fclose(fileID)
+% [numpoints,numobjects] = size(xplot); 
+% fileID = fopen('poo.txt','w');
+% fprintf(fileID,'%d\n',numobjects);
+% formspec = '%e,%e,%e,%e,%e,%e,%e,%e,%e\n';
+% for i = 1:100
+% 	fprintf(fileID,formspec,xplot(i,1),yplot(i,1),zplot(i,1),...
+% 							xplot(i,2),yplot(i,2),zplot(i,2),...
+% 							xplot(i,3),yplot(i,3),zplot(i,3));
+% end
+% fclose(fileID)
