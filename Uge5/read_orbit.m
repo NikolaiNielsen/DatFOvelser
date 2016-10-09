@@ -1,4 +1,4 @@
-function pos = read_orbit(fil)
+function pos = read_orbit(fil,plot)
 	% funktion der læser data genereret af orbit.m, og plotter disse i et
 	% 3d plot.
 	
@@ -36,13 +36,15 @@ function pos = read_orbit(fil)
 	pos(1,:,:) = x';
 	pos(2,:,:) = y';
 	pos(3,:,:) = z';
-% 
-% 	figure
-% 	hold on
-% 	for i = 1:num_ops
-% 		plot3(x(:,i),y(:,i),z(:,i))
-% 	end
-% 	xlabel('x')
-% 	ylabel('y')
-% 	
+ 
+	if plot == 1
+		figure
+		hold on
+		for i = 1:num_ops
+			plot3(x(:,i),y(:,i),z(:,i))
+		end
+		xlabel('x')
+		ylabel('y')
+	end
+
 end

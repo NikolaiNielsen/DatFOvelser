@@ -4,56 +4,31 @@ close all
 
 
 fil = 'orbit.dat';
+pos = read_orbit(fil,0);
 
-fileID = fopen(fil);
-num_ops = fscanf(fileID,'%e\n',[1 1]);
-
-sizeA = [3,Inf];
-A = fscanf(fileID,'%e',sizeA);
-
-fclose(fileID);
-
-num_t = numel(A)/(3*num_ops);
-A = reshape(A,[3*num_ops num_t])';
-
-x = zeros(num_t,num_ops);
-y = x;
-z = x;
-
-pos = zeros(3,num_ops,num_t);
+v = VideoWriter('my_animation.avi');
+open(v)
+x = squeeze(pos(1,:,:));
+y = squeeze(pos(2,:,:));
+z = squeeze(pos(3,:,:));
 
 
-for i = 1:num_ops
-% 	start = 3*i-2
-% 	stop = start+2
-	x(:,i) = A(:,3*i-2);
-	y(:,i) = A(:,3*i-1);
-	z(:,i) = A(:,3*i);
-% 	pos(1,:,i) = A(:,3*i-2);
-% 	pos(2,:,i) = A(:,3*i-1);
-% 	pos(3,:,i) = A(:,3*i);
+[dims,nobs,time] = size(pos);
+fig = figure
+hold on
+title('LPK331')
+for i = 1:time
+	% plot the first object
+	plot(x(1,1:i),y(1,1:i),'r')
+	
+	% plot the second object
+	plot(x(2,1:i),y(2,1:i),'b')
+	
+	% plot the second object
+	plot(x(3,1:i),y(3,1:i),'g')
+	writeVideo(v,getframe(fig))
+	
 	
 end
-pos(1,:,:) = x';
-pos(2,:,:) = y';
-pos(3,:,:) = z';
-
-figure
-hold on
-for i = 1:num_ops
-	plot3(x(:,i),y(:,i),z(:,i))
-end
-xlabel('x')
-ylabel('y')
-
-% pos = read_orbit(fil)
-
-% 
-% B = zeros(num_t,3*num_objects);
-% 
-% for i = 1:3
-% 	for j = 1:3
-% 		start = 3*j-2
-% 		stop = start+2
-% 	end
-% end
+hold off
+close(v);
