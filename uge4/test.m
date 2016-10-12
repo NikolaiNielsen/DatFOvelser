@@ -4,20 +4,23 @@ clear all
 close all
 clc
 
-r = eye(3); %r(2,2) = 2; r(3,3) = 3;
+r_test=[1 -2 1 2 0 1; 3 -1 -1 1 -3 0; 0 0 0 0 0 0];%eye(3); %r(2,2) = 2; r(3,3) = 3;
+m_test=[3 4 5 7 2 5];
+global G
+G = 1;
 
-rv = rvec(r);
+rv_test = rvec(r_test);
 
 
-rv1(:,:,1) = [1 2 3 4; 5 6 7 8; 0 9 8 1];
-rv1(:,:,2) = [0 1 2 3; 4 5 6 7; 8 0 9 8];
-rv1(:,:,3) = [1 2 2 4; 5 1 7 2; 0 4 8 1];
-rv1(:,:,4) = [5 2 3 4; 5 6 8 8; 0 9 5 1];
+% rv1(:,:,1) = [1 2 3 4; 5 6 7 8; 0 9 8 1];
+% rv1(:,:,2) = [0 1 2 3; 4 5 6 7; 8 0 9 8];
+% rv1(:,:,3) = [1 2 2 4; 5 1 7 2; 0 4 8 1];
+% rv1(:,:,4) = [5 2 3 4; 5 6 8 8; 0 9 5 1];
 
-rl = rvlen(r);
-rl2 = rvlen(rv);
-rl3 = rvlen(rv1);
-
+rl_test = rvlen(rv_test);
+% rl2 = rvlen(rv);
+% rl3 = rvlen(rv1);
+acc_test = accvec(m_test,rv_test,rl_test);
 
 %% Hyggeg hyggepwiojedrfaieurhj med acceleration.
 clear all
