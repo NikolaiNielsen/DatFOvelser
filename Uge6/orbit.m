@@ -7,7 +7,7 @@ function r=orbit
 % with the provided image.
 
 global G ETA DT_INIT Ekin Epot T JJ rp
-load('rtest.mat');
+%load('rtest.mat');
 r=[1 -2 1 2 0 1; 3 -1 -1 1 -3 0; 0 0 0 0 0 0];     % initial data
 v=[0 0 0 0 0 0; 0 0 0 0 0 0; 0 0 0 0 0 0];
 m=[3 4 5 7 2 5];
@@ -18,7 +18,7 @@ simple=true;                                      % choice of dA/dt algorithm (f
 
 if simple == true                                 % needed variables when using the analytic expression for dA/dt
    s=size(r);
-   aold=zeros(s);
+%    aold=zeros(s);
    rv_old=0;
 end
 G = 1;
@@ -35,7 +35,7 @@ Epot=E(1);                                         % variables to contain the en
 Ekin=E(2);
 T=0;                                               % Time variable for energy plotting
 JJ=1;                                              % Number of data points in plot array
-nplot=100;                                         % number of iterations between plotting
+nplot=1000000;                                         % number of iterations between plotting
 rp=r;                                              % first position point for plotting
 
 while t < tend                                     % main loop for the integration
@@ -49,7 +49,7 @@ while t < tend                                     % main loop for the integrati
       %aold=a;
 	  simple = false;
    else
-      aa=aac_full(m, rv, rl, rv_old, dt, ii,v); 	   % 3xn The more correct version of dA/dt
+      aa=aac_full(m, rv, rl, ii,v); 	   % 3xn The more correct version of dA/dt
       rv_old=rv;
    end
 
@@ -65,7 +65,7 @@ while t < tend                                     % main loop for the integrati
    v=vn;
    t=t+dt;
    ii=ii+1;
-   fprintf('ii = %d\ndt = %f\nt+dt = %f\n',ii,dt,t);
+   %fprintf('ii = %d\ndt = %f\nt+dt = %f\n',ii,dt,t);
 end
 
 r(:,1)
@@ -237,13 +237,13 @@ hold off
 plot(T,Ekin,'-r',T,Epot,'-b',T,Ekin+Epot,'-g') % plot the energy data
 axis ([0 tend -700 500]);
 xlabel('Time'); ylabel('Energy');
-legend('E kin','E pot','E total');
+%legend('E kin','E pot','E total');
 
 drawnow;                                      % force the updating of the plot frame to take place
 end
 
 %% aac_full
-function accdot=aac_full(m, rv, rl, rv_old, dt_old, ii, v)
+function accdot=aac_full(m, rv, rl, ii, v)
 
 global G
 % determine the derivative using eq(4) in exercise 3.
