@@ -11,6 +11,7 @@ global G ETA DT_INIT Ekin Epot T JJ rp
 r=[1 -2 1 2 0 1; 3 -1 -1 1 -3 0; 0 0 0 0 0 0];     % initial data
 v=[0 0 0 0 0 0; 0 0 0 0 0 0; 0 0 0 0 0 0];
 m=[3 4 5 7 2 5];
+% m = [m;m;m];
 DT_INIT=5e-2;                                      % first timestep
 tend=.4;                                           % end time of integration
 
@@ -49,7 +50,7 @@ while t < tend                                     % main loop for the integrati
       %aold=a;
 	  simple = false;
    else
-      aa=aac_full(m, rv, rl, ii,v); 	   % 3xn The more correct version of dA/dt
+      aa=aac_full(m, rv, rl, v); 	   % 3xn The more correct version of dA/dt
       rv_old=rv;
    end
 
@@ -73,57 +74,39 @@ end
 
 %% rstep
 function rn=rstep(r,v,a,aa,dt)
-
 % calculate the time stepping of the point depending on eq(7)
-
-for i=1:length(r)
-    for j=1:3
-        rn(j,i)=r(j,i)+v(j,i)*dt+0.5*a(j,i)*dt^2+1/6*aa(j,i)*dt^3;
-    end
-end
-
+rn=r+v.*dt+0.5.*a.*dt^2+1/6.*aa.*dt.^3;
 end
 
 %% rvec
 function rv=rvec(r)
-
 % calculate the distance between points (assumes r(3,#))
 % where # represents the number of different vectors.
-
 s=size(r);
 rv=zeros(s(1),s(2),s(2));
 
-for i=1:s(1)
-   for j=1:s(2)
-      for k=1:s(2)
-%          fprintf('i = %d, j = %d, k = %d\n',i,j,k);
-% 		 fprintf('r(j,k) = %d, r(i,k) = %d\n', r(j,k),r(i,k));
-		 rv(i,j,k)=r(i,j)-r(i,k);
-      end
-   end
+for j=1:s(2)
+  for k=1:s(2)
+	rv(:,j,k)=r(:,j)-r(:,k);
+  end
 end
 
 end
 
 %% rvlen
 function rl=rvlen(rv)
-
 % calculate the length of the vectors (rv(3,#) or rv(3,#,#) format)
 
 s=size(rv);
 
 if ndims(rv) == 3 && s(1) == 3
-   rl=zeros(s(2),s(3));
-   for i=1:length(rv)
-       for j=1:length(rv)
-           rl(j,i)=sqrt(rv(1,j,i).^2+rv(2,j,i).^2+rv(3,j,i).^2);
-       end
-   end
+  rl=zeros(s(2),s(3));
+  rl(:,:)=sqrt(rv(1,:,:).^2+rv(2,:,:).^2+rv(3,:,:).^2);
 elseif ndims(rv) == 2 && s(1) == 3
-    rl=zeros(1,s(2));
-    for j=1:s(1)
-        rl(j)=sqrt(rv(1,j).^2+rv(2,j).^2+rv(3,j).^2);
-    end
+  rl=zeros(1,s(2));
+  for j=1:s(1)
+    rl(j)=sqrt(rv(1,j).^2+rv(2,j).^2+rv(3,j).^2);
+  end
 else
     fprintf('The rvlen routine does not support the dimension of rv: (%i %i)\n',s)
     fprintf('has to be of dimension (3,#) or (3,#,#)\n')
@@ -137,28 +120,9 @@ function vn=vstep(v,a,aa,dt)
 
 % calculate the time stepping of the point depending on eq(5)
 
-for vec=1:length(v)
-   for dim=1:3
-      vn(dim,vec)=v(dim,vec)+dt*a(dim,vec)+0.5*aa(dim,vec)*dt^2;
-   end
-end
+      vn=v+dt*a+0.5*aa*dt^2;
 
 end
-
-%% aac
-% function [aa,simple]=aac(a, aold, dtold, i)
-%
-% % calculate the time derivative of the acceleration of the object eq(8)
-%
-% s=size(a);
-% aa=zeros(s(1),s(2));
-% for in=1:s(2)
-%    for dim=1:s(1)
-% 	  aa(dim,in)=(a(dim,in)-aold(dim,in))/dtold;
-%    end
-% end
-% simple = false;
-% end
 
 %% acc
 function a=acc(m,rv,rl)
@@ -169,14 +133,14 @@ global G
 %load('rtest.mat');
 s=size(rv);
 a=zeros(s(1),s(2));
+b = zeros(s(1),s(2),s(2));
 
-for dim=1:3
-	for in=1:s(2)
-		for out=1:s(2)
-			if in ~= out
-% 				fprintf('i = %d, j = %d, k = %d\n',i,j,k)
-				a(dim,in)=a(dim,in)-G*m(out)*rv(dim,in,out)/rl(in,out)^3;
-			end
+for in=1:s(2)
+	for out=1:s(2)
+		if in ~= out
+			%fprintf('in = %d\nout = %d\n',in,out)
+			b(:,out,in) = G*m(out)*rv(:,in,out)/rl(in,out)^3;
+			a(:,in)=a(:,in)-b(:,out,in);
 		end
 	end
 end
@@ -243,23 +207,18 @@ drawnow;                                      % force the updating of the plot f
 end
 
 %% aac_full
-function accdot=aac_full(m, rv, rl, ii, v)
+function accdot=aac_full(m, rv, rl, v)
 
 global G
 % determine the derivative using eq(4) in exercise 3.
 
 n=size(m,2);
 accdot=zeros(3,n);
-if ii>1
-	%rvdt=(rv-rv_old)/dt_old;
-	for dim=1:3
-		for in=1:n
-			for out=1:n
-				if in ~= out
-					accdot(dim,in)=accdot(dim,in)-G*m(out)*(v(dim,in)/rl(in,out)^3- ...
-					3*rv(dim,in,out).*sum(rv(:,in,out).*v(:,in))/(rl(in,out)^5));
-				end
-			end
+for in=1:n
+	for out=1:n
+		if in ~= out
+			accdot(:,in)=accdot(:,in)-G.*m(out).*(v(:,in)./rl(in,out).^3- ...
+			3.*rv(:,in,out).*sum(rv(:,in,out).*v(:,in))./(rl(in,out).^5));
 		end
 	end
 end
