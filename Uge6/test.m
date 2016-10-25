@@ -1,11 +1,13 @@
 % %% Test af hele script
-% clear all
-% profile on
-% for i = 1:2
-% 	orbit_ref
-% end
-% profile off
-% profile viewer
+clear all
+clc
+
+profile on
+for i = 1:2
+	orbit
+end
+profile off
+profile viewer
 
 
 %% Test af enkelte funktioner
