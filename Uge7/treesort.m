@@ -11,3 +11,9 @@ s = [];
 for i = 1:length(l)
 	s = buildtree(s,l(i));
 end
+
+arr = [];
+
+for i = 1:length(l)
+	arr = readtree(s,arr);
+end
