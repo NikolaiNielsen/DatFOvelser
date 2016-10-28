@@ -1,29 +1,47 @@
 function arr = readtree(s,arr)
-	% I denne funktion skal træet læses. Dette gøres ved, først at tjekke
-	% om der er et "smaller"-field. Hvis dette er tilfældet, så kald
-	% funktionen igen, med dette field som input-struct. Hvis der er et
-	% tomt "smaller"-field, er bunden nået og vi returnerer
+	persistent liste tree;
+	if isempty(liste)
+		liste = arr;
+		tree = s;
+	end
+	
+	% I denne funktion skal træet læses. Nyt forsøg! Tjek med værdierne i
+	% arr.
+	% Hvis arr(end) < s.value & s.smaller findes : gå ned i s.smaller
+	% Hvis arr(end) < s.value & s.smaller IKKE findes: 
+	% - tag s.value, minus én i s.number, return
+	% Hvis arr(end) = s.val & s.number > 0: minus én i s.number, return
+	% Hvis arr(end) = s.val & s.number = 0: træd ned i s.larger 
+	% Hvis arr(end) > 
 
-
-	% Først tjekkes det, om value-feltet eksisterer. valuefeltet af et
-	% child findes kun hvis parents smaller-felt eksisterer.
-	if ~isfield(s,'value')
+	% Først gås der helt ned i bunden af treet, til den mindste værdi
+	if isempty(liste) && ~isempty(tree.smaller)
+		arr = readtree(tree.smaller,arr);
+		return
+	elseif isempty(arr)
+		arr(end+1) = tree.value;
+		tree.number = tree.number - 1;
 		return
 	end
 	
-	% Hvis s.smaller IKKE er tom, er der et mindre tal. Gå ned til dette
-	if ~isempty(s.smaller)
-		arr = readtree(s.smaller,arr);
+	% Så køres hoveddelen
+	largest = arr(end);
+	if largest < tree.value && ~isempty(tree.smaller)
+		arr = readtree(tree.smaller,arr);
+		return
+	elseif	(largest < tree.value && isempty(tree.smaller)) ||...
+			(largest == tree.value && tree.number > 0)
 		
-	elseif isempty(s.smaller)
-		arr(end+1) = s.value;
-		s.number = s.number-1;
+		arr(end+1) = tree.value;
+		tree.number = tree.number - 1;
+		return
+		
+	elseif largest == tree.value && tree.number == 0
+		if isempty(tree.larger)
+			disp('something went wrong!')
+		else
+			arr = readtree(tree.larger,arr);
+		end
 	end
 	
-
-	% Hvis både smaller og larger er tomme, kan vi tage værdien og slette
-	% lortet.
-% 	if isempty(s.smaller) && isempty(s.larger)
-% 		
-% 	end
 end

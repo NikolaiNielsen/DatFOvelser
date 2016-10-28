@@ -13,9 +13,8 @@ for i = 1:length(l)
 end
 
 arr = [];
-arr = readtree(s,arr);
-arr = readtree(s,arr);
 
-% for i = 1:length(l)
-% 	
-% end
+
+for i = 1:4
+	arr = readtree(s,arr);
+end
