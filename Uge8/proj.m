@@ -1,5 +1,5 @@
 clear all
-close all
+%close all
 clc
 
 % Variables!
@@ -50,7 +50,7 @@ hold on
 p1 = scatter(r.pos(1,r.r1,1),r.pos(2,r.r1,1),dot_size,r.col(1),'filled');
 p2 = scatter(r.pos(1,r.r2,1),r.pos(2,r.r2,1),dot_size,r.col(2),'filled');
 axis([0 stor(1) 0 stor(2)])
-pause(ptime)
+drawnow
 for i = 2:tend
 	%fprintf('i = %d\n', i);
 	rv = rvec(r.pos(:,:,i-1));
@@ -71,10 +71,11 @@ for i = 2:tend
 	r.t = tid(r);
 
 	% new position for individuals. Simple first order Euler integration
-	r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
+	% r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
+	r.pos(:,:,i) = nextstep(r.pos(:,:,i-1),r.vel,dt);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
-	[r.vel, r.pos(:,:,i)] = edgecase(r,dt);
+	[r.vel, r.pos(:,:,i)] = edgecase(r.vel, r.pos(:,:,i), r.pos(:,:,i-1),stor,dt);
 	% r.oob = r.pos(:,:,i) <= 0 | r.pos(:,:,i) >= stor(1);
 	% if ~isempty(r.oob)
 	% 	% A matrix of 1's and -1's to indicate which velocity components
@@ -92,5 +93,5 @@ for i = 2:tend
 	delete(p2);
 	p1 = scatter(r.pos(1,r.r1,i),r.pos(2,r.r1,i),dot_size,r.col(1),'filled');
 	p2 = scatter(r.pos(1,r.r2,i),r.pos(2,r.r2,i),dot_size,r.col(2),'filled');
-	pause(ptime)
+	drawnow
 end
