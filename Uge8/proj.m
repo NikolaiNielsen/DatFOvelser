@@ -54,22 +54,22 @@ for i = 2:tend
 	r.tally(1,:) = r.t == 0;
 
 	% Finder ny retning for disse, og opdater hastigheden
-	r.speed(:,:) = speedupdate(r);
+	r.vel(:,:) = velupdate(r);
 
 	% Genstarter tiden for disse
 	r.t = tid(r);
 
 	% Ny position. Simpel Eulerintegration
-	r.pos(1,r.r1,i) = r.pos(1,r.r1,i-1) + r.speed(1,r.r1)*dt;
-	r.pos(2,r.r1,i) = r.pos(2,r.r1,i-1) + r.speed(2,r.r1)*dt;
-	r.pos(1,r.r2,i) = r.pos(1,r.r2,i-1) + r.speed(1,r.r2)*dt;
-	r.pos(2,r.r2,i) = r.pos(2,r.r2,i-1) + r.speed(2,r.r2)*dt;
+	r.pos(1,r.r1,i) = r.pos(1,r.r1,i-1) + r.vel(1,r.r1)*dt;
+	r.pos(2,r.r1,i) = r.pos(2,r.r1,i-1) + r.vel(2,r.r1)*dt;
+	r.pos(1,r.r2,i) = r.pos(1,r.r2,i-1) + r.vel(1,r.r2)*dt;
+	r.pos(2,r.r2,i) = r.pos(2,r.r2,i-1) + r.vel(2,r.r2)*dt;
 
 	% Positionen tjekkes, for om randen nås:
 	r.oob = r.pos(:,:,i) <= 0 | r.pos(:,:,i) >= stor(1);
 	if ~isempty(r.oob)
-		r.speed = r.speed.*(r.oob*(-2)+1);
-		r.pos(:,:,i) = r.pos(:,:,i-1) + r.speed*dt;
+		r.vel = r.vel.*(r.oob*(-2)+1);
+		r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
 	end
 
 	delete(p1);
