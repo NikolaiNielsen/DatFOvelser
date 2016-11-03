@@ -7,7 +7,7 @@ dt = 1;				% Tidsskridtet
 vis = 90;			% Synsfelt i grader.
 stor = [100 100]; 	% Spillebrættets størrelse
 ptime = 0.1;		% Pausetid
-tend = 20;
+tend = 100;
 dot_size = 15;
 
 % For race 1:
@@ -33,21 +33,7 @@ r.resetTime = [t_f1; t_f2];
 r.Hast = [v_f1; v_f2];
 
 %% Lav startposition:
-r.start(1,:) = rand(n1+n2,1)*stor(1);
-r.start(2,:) = rand(n1+n2,1)*stor(2);
-r.race(1:n1) = 1;
-r.race(n1+1:n1+n2) = 2;
-r.r1 = r.race == 1;
-r.r2 = r.race == 2;
-
-r.pos(:,:,1) = r.start;
-r.dir = rand(1,n1+n2)*2*pi;
-r.speed(1,r.r1,1) = v_f1 * cos(r.dir(r.r1));
-r.speed(2,r.r1,1) = v_f1 * sin(r.dir(r.r1));
-r.speed(1,r.r2,1) = v_f2 * cos(r.dir(r.r2));
-r.speed(2,r.r2,1) = v_f2 * sin(r.dir(r.r2));
-r.t(r.r1) = t_f1;
-r.t(r.r2) = t_f2;
+r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor);
 
 
 figure
@@ -62,7 +48,6 @@ for i = 2:tend
 
 	% Vi tæller ned i antallet af trin til retningsskift
 	r.t = r.t-1;
-% 	r.t
 
 	% Tjekker hvilke der er 0
 	r.tally(1,:) = r.t == 0;
@@ -79,17 +64,12 @@ for i = 2:tend
 	r.pos(1,r.r2,i) = r.pos(1,r.r2,i-1) + r.speed(1,r.r2)*dt;
 	r.pos(2,r.r2,i) = r.pos(2,r.r2,i-1) + r.speed(2,r.r2)*dt;
 
-	% % Positionen tjekkes, for om randen nås:
-	% r1.oob = r1.pos(:,:,i) <= 0 | r1.pos(:,:,i) >= stor(1);
-	% if ~isempty(r1.oob)
-	% 	r1.speed = r1.speed.*(r1.oob*(-2)+1);
-	% 	r1.pos(:,:,i) = r1.pos(:,:,i-1) + r1.speed*dt;
-	% end
-	% r2.oob = r2.pos(:,:,i) <= 0 | r2.pos(:,:,i) >= stor(1);
-	% if ~isempty(r2.oob)
-	% 	r2.speed = r2.speed.*(r2.oob*(-2)+1);
-	% 	r2.pos(:,:,i) = r2.pos(:,:,i-1) + r2.speed*dt;
-	% end
+	% Positionen tjekkes, for om randen nås:
+	r.oob = r.pos(:,:,i) <= 0 | r.pos(:,:,i) >= stor(1);
+	if ~isempty(r.oob)
+		r.speed = r.speed.*(r.oob*(-2)+1);
+		r.pos(:,:,i) = r.pos(:,:,i-1) + r.speed*dt;
+	end
 
 	delete(p1);
 	delete(p2);
