@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-% Variable!
+% Variables!
 dt = 1;				% time step
 vis = 90;			% fov in degrees
 stor = [100 100]; 	% size of the board
@@ -17,6 +17,7 @@ t_f1 = 10;			% num steps a race 1 cell moves in a given direction
 r_panik = 10;		% panic distance for race 1, must be smaller than r_f2
 t_panik = 15;		% panic time for race 1
 t_pp = 10;			% secondary panic time
+t_syg = 15;
 r_die1 = 5;			% distance between race 1 and 2, where race 1 dies
 r.col(1) = 'g';		% color of healthy race 1 cells
 
@@ -29,8 +30,16 @@ t_fol = 10;			% steps an r2 cell follows an r1 cell
 r_die2 = 5;			% Distance at which r2 dies, if backstabbed
 r.col(2) = 'r';		% color of r2 cells
 
-r.resetTime = [t_f1; t_f2];
-r.Hast = [v_f1; v_f2];
+% Vectors corresponding to the times and speeds of states.
+% 1: healthy r1
+% 2: normal r2
+% 3: Panicy r1
+% 4: secondary panic r1
+% 5: sick r1
+% 6: hunting r2
+r.resetTime 	= [t_f1, 	t_f2, 		t_panik,	t_pp, 		t_syg, 		t_fol];
+r.Hast 			= [v_f1, 	v_f2, 		2*v_f1, 	2*v_f1, 	1.5*v_f1, 	v_f2];
+r.vis 			= [pi/2, 	pi/4, 		pi/2, 		pi/2, 		pi/2, 		pi/4];
 
 %% Lav startposition:
 r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor);
@@ -40,10 +49,12 @@ figure
 hold on
 p1 = scatter(r.pos(1,r.r1,1),r.pos(2,r.r1,1),dot_size,r.col(1),'filled');
 p2 = scatter(r.pos(1,r.r2,1),r.pos(2,r.r2,1),dot_size,r.col(2),'filled');
-axis([0 100 0 100])
+axis([0 stor(1) 0 stor(2)])
 pause(ptime)
 for i = 2:tend
+	%fprintf('i = %d\n', i);
 	rv = rvec(r.pos(:,:,i-1));
+	rlen = rvlen(rv);
 
 
 	% counting down the time variable towards 0 (where a change in
@@ -59,11 +70,8 @@ for i = 2:tend
 	% restart time counter
 	r.t = tid(r);
 
-	% new position for individuals. Simple Euler integration
-	r.pos(1,r.r1,i) = r.pos(1,r.r1,i-1) + r.vel(1,r.r1)*dt;
-	r.pos(2,r.r1,i) = r.pos(2,r.r1,i-1) + r.vel(2,r.r1)*dt;
-	r.pos(1,r.r2,i) = r.pos(1,r.r2,i-1) + r.vel(1,r.r2)*dt;
-	r.pos(2,r.r2,i) = r.pos(2,r.r2,i-1) + r.vel(2,r.r2)*dt;
+	% new position for individuals. Simple first order Euler integration
+	r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
 
 	% Edgecases are checked. If they meet the edge, they're reflected
 	r.oob = r.pos(:,:,i) <= 0 | r.pos(:,:,i) >= stor(1);
