@@ -49,6 +49,7 @@ for i = 2:tend
 	% Vi tæller ned i antallet af trin til retningsskift
 	r.t = r.t-1;
 
+
 	% Tjekker hvilke der er 0
 	r.tally(1,:) = r.t == 0;
 
