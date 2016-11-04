@@ -6,7 +6,6 @@ function r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor)
 	r.race(1:n1) = 1;
 	r.race(n1+1:n1+n2) = 2;
 	r.racelog(1,:) = r.race;
-	% r.race(1) = 3;
 	r.r1 = r.race == 1;
 	r.r2 = r.race == 2;
 
