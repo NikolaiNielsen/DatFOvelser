@@ -19,18 +19,17 @@ function r = statechange(r)
 			for out = 1:length(r.t)
 				outRace = race(out);
 				if outRace == 2 || outRace == 6
-					% fprintf('rvlen = %f',rvlen)
-					if r.rvlen(1,in,out) <= r.r1rad(2)
+					if r.rvlen(in,out) <= r.r1rad(2)
 						newrace = 2;
-						% fprintf('in = %d, new race = %d\n', in,newrace)
 						r.t(in) = r.resetTime(newrace);
 						r.race(in) = newrace;
-					elseif r.rvlen(1,in,out) <= r.r1rad(1)
+						break;
+					elseif r.rvlen(in,out) <= r.r1rad(1)
 						newrace = 3;
 						r.vel(:,in) = -r.vel(:,in);
-						% fprintf('in = %d, new race = %d\n', in,newrace)
 						r.t(in) = r.resetTime(newrace);
 						r.race(in) = newrace;
+						break;
 					end
 
 				end

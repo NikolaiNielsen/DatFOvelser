@@ -60,10 +60,12 @@ drawnow
 
 
 for i = 2:tend
+	
 	r.rv = rvec(r.pos(:,:,i-1));
 	r.rvlen = rvlen(r.rv);
+	r2 = r;
 	r = statechange(r);
-
+	
 	% counting down the time variable towards 0 (where a change in
 	% direction happens)
 	r.t = r.t-1;

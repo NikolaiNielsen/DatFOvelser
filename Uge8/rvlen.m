@@ -4,6 +4,6 @@ function rl=rvlen(rv)
 s=size(rv);
 
 rl=zeros(s);
-rl(1,:,:)=sqrt(rv(1,:,:).^2+rv(2,:,:).^2);
-rl(2,:,:) = rl(1,:,:);
+rl=squeeze(sqrt(rv(1,:,:).^2+rv(2,:,:).^2));
+% rl(2,:,:) = rl(1,:,:);
 end
