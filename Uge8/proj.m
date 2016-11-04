@@ -60,8 +60,8 @@ drawnow
 
 
 for i = 2:tend
-	
-	r.rv = rvec(r.pos(:,:,i-1));
+	rlast = r.pos;
+	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
 	r2 = r;
 	r = statechange(r);
@@ -83,19 +83,19 @@ for i = 2:tend
 
 	% new position for individuals. Simple first order Euler integration
 	% r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
-	r.pos(:,:,i) = nextstep(r.pos(:,:,i-1),r.vel,dt);
+	r.pos = nextstep(rlast,r.vel,dt);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
-	[r.vel, r.pos(:,:,i)] = edgecase(r.vel, r.pos(:,:,i), ...
-									r.pos(:,:,i-1), stor, dt);
+	[r.vel, r.pos] = edgecase(r.vel, r.pos, ...
+									rlast, stor, dt);
 
 	% Delete the last iterations scatter plots, plot the new ones and pause
 	% the simulation.
 	delete(p1);
 	delete(p2);
 	delete(p3);
-	p1 = scatter(r.pos(1,r.r1,i),r.pos(2,r.r1,i),dot_size,r.col(1),'filled');
-	p2 = scatter(r.pos(1,r.r2,i),r.pos(2,r.r2,i),dot_size,r.col(2),'filled');
-	p3 = scatter(r.pos(1,r.race == 3,i),r.pos(2,r.race == 3,i),dot_size,r.col(3),'filled');
+	p1 = scatter(r.pos(1,r.r1),r.pos(2,r.r1),dot_size,r.col(1),'filled');
+	p2 = scatter(r.pos(1,r.r2),r.pos(2,r.r2),dot_size,r.col(2),'filled');
+	p3 = scatter(r.pos(1,r.race == 3),r.pos(2,r.race == 3),dot_size,r.col(3),'filled');
 	drawnow
 end
