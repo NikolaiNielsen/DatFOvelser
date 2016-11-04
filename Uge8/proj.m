@@ -17,17 +17,16 @@ r_panik = 10;		% panic distance for race 1, must be smaller than r_f2
 t_panik = 15;		% panic time for race 1
 r_pp = 5;			% secondary panic radius
 t_pp = 10;			% secondary panic time
-r_syg = 7;			% sickness radius
+r_syg = 1;			% sickness radius
 t_syg = 15;			% Sickness time
-r_die1 = 2;			% distance between race 1 and 2, where race 1 dies
+r_die = 1;			% distance between race 1 and 2, where race 1 dies (if 1 is in 2s fov, otherwise 2 dies)
 
 % For race 2:
 n2 = 25;			% num cells race 2
 v_f2 = 0.2;			% Normal speed for race 2
 t_f2 = 3;			% time for race 2
-r_f2 = 15;			% vision radius for race 2.
+r_fol = 15;			% vision radius for race 2.
 t_fol = 10;			% steps an r2 cell follows an r1 cell
-r_die2 = 5;			% Distance at which r2 dies, if backstabbed
 
 % Vectors corresponding to the times and speeds of states.
 % 1: healthy r1
@@ -43,12 +42,12 @@ r.Hast 			= [	v_f1, 		v_f2, 		2*v_f1,...
 				 	% This is the cosine of the angle
 r.vis 			= [	0, 	1/sqrt(2),	0, ...
 					0, 	0, 	1/sqrt(2)];
-r.col 			= [ 'g','r','b','y','m','c'];
-r.r1rad 		= [r_panik, r_syg, r_die1,r_pp];
+r.col 			= [ 'g','r','b','y','m','k'];
+r.r1rad 		= [r_panik, r_syg, r_die,r_pp];
+r.r2rad			= r_fol;
 
 %% Lav startposition:
 r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor);
-
 
 figure
 hold on
@@ -56,12 +55,11 @@ axis([0 stor 0 stor])
 p = plotter(r,0);
 title(sprintf('%d',1))
 
-
 for i = 2:tend
 	rlast = r.pos;
 	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
-	r2 = r;
+	% r2 = r;
  	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in
@@ -91,4 +89,6 @@ for i = 2:tend
 	% the simulation.
 	title(sprintf('%d',i))
 	p = plotter(r,1,p);
+	r.rvlast = r.rv;
+	r.rvlenlast = r.rvlen;
 end

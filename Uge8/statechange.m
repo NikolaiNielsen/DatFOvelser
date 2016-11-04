@@ -2,21 +2,15 @@ function r = statechange(r)
 	% The purpose of this function is to calculate the field of vision for the different cells
 	% The way this is done is by using the dot product of the separation vector and velocity vector, to calculate the angle between these. This allows us to calculate whether or not a cell should flee, die, get sick, give chase or what have you.
 	race = r.race;
-% 	r1 = race == 1;
-% 	r2 = race == 2;
-% 	panic = race == 3;
-% 	spanic = race == 4;
-% 	sick = race == 5;
-% 	hunt = race == 6;
 	n = length(race);
 
 	% Slamkoder et forloop
 	for in = 1:n
 		inRace = race(in);
+		vin = r.vel(:,in);
 
 		% Healthy race 1
 		if inRace == 1
-			vin = r.vel(:,in);
 			for out = 1:n
 				outRace = race(out);
 				vout = r.vel(:,out);
@@ -31,6 +25,12 @@ function r = statechange(r)
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
+
+						% If 1 is outside of 2's fov, 2 dies
+						else
+							newrace = 1;
+							r.t(out) = r.resetTime(newrace);
+							r.race(out) = newrace;
 						end
 					% Cell gets sick
 					elseif r.rvlen(in,out) <= r.r1rad(2);
@@ -71,12 +71,38 @@ function r = statechange(r)
 					end
 				end
 			end
-		% elseif inRace == 2
+
+		% Race 2 not chasing. This only checks for chases, as death is handled by the other races' checks.
+		elseif inRace == 2
+			victims = r.race == 1 | r.race == 3 | r.race == 4 | r.race == 5;
+			dists = r.rvlen(in,:) <= r.r2rad;
+			distvicts = dists & victims;
+			num = sum(distvicts);
+			contesters = [];
+			if num ~= 0
+				for out = 1:n
+					if distvicts(out)
+						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.Hast(inRace));
+						if cosang >= r.vis(inRace)
+							contesters(1,end+1) = dists(out);
+							contesters(2,end+1) = out;
+						end
+					end
+				end
+				if ~isempty(contesters)
+					[~,outIndex] = min(contesters(1,:));
+					r.chase(in) = contesters(2,outIndex);
+					r.t(in) = r.resetTime(6);
+					r.race(in) = 6;
+				end
+			end
+
 
 		% Race 1 in panic.
 		elseif inRace == 3
 			for out = 1:n
 				outRace = race(out);
+				vout = r.vel(:,out);
 				% If it's race 2
 				if outRace == 2 || outRace == 6
 					% cell dies
@@ -88,6 +114,12 @@ function r = statechange(r)
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
+
+						% If 1 is outside of 2's fov, 2 dies
+						else
+							newrace = 1;
+							r.t(out) = r.resetTime(newrace);
+							r.race(out) = newrace;
 						end
 
 					% Cell gets sick but doesn't turn around
@@ -109,6 +141,7 @@ function r = statechange(r)
 		elseif inRace == 4
 			for out = 1:n
 				outRace = race(out);
+				vout = r.vel(:,out);
 				% If it's race 2
 				if outRace == 2 || outRace == 6
 					% cell dies
@@ -119,6 +152,12 @@ function r = statechange(r)
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
+
+						% If 1 is outside of 2's fov, 2 dies
+						else
+							newrace = 1;
+							r.t(out) = r.resetTime(newrace);
+							r.race(out) = newrace;
 						end
 					% Cell gets sick, but doesn't turn around
 					elseif r.rvlen(in,out) <= r.r1rad(2);

@@ -2,17 +2,27 @@ function vel = velupdate(r)
 
 	% Load the vel array, so we don't accidentally set them to 0.
 	vel = r.vel(:,:);
-	
+
 	% Loop over the array to check which velocities needs updating
-	for j = 1:length(r.t);
-		
-		% If the time is 0 for the j'th particle, update its direction and
+	for in = 1:length(r.t);
+
+		% If the time is 0 for the in'th particle, update its direction and
 		% velocity
-		if r.tally(1,j)
-			r.dir(j) = rand()*2*pi;
+		if r.tally(1,in)
+			r.dir(in) = rand()*2*pi;
 			% Get the speed from the array of reference speeds.
-			vel(1,j) = r.Hast(r.race(j)) * cos(r.dir(j));
-			vel(2,j) = r.Hast(r.race(j)) * sin(r.dir(j));
+			vel(1,in) = r.Hast(r.race(in)) * cos(r.dir(in));
+			vel(2,in) = r.Hast(r.race(in)) * sin(r.dir(in));
+		end
+		% If it's on the hunt we update the vector all the time.
+		if r.race(in) == 6
+			% We get the victim ID
+			victim = r.chase(in);
+
+			% We divide the separation vector with its length to obtain a unit vector, then scale it with r.Hast(6) for the appropriate velocity
+			dirvector = r.rv(:,victim,in);
+			dirlength = r.rvlen(victim,in);
+			vel(:,in) = dirvector*r.Hast(6)/dirlength;
 		end
 	end
 end
