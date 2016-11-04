@@ -1,5 +1,5 @@
 function [vel,pos] = edgecase(vel,pos,pos1,stor,dt)
-	oob = pos <= 0 | pos >= stor(1);
+	oob = pos <= 0 | pos >= stor;
 
 	if ~isempty(oob)
 		% A matrix of 1's and -1's to indicate which velocity components
