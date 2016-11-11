@@ -1,8 +1,8 @@
-function r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor)
+function r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,side)
 
 
-	r.start(1,:) = rand(n1+n2,1)*r.stor;
-	r.start(2,:) = rand(n1+n2,1)*r.stor;
+	r.start(1,:) = rand(n1+n2,1)*r.side;
+	r.start(2,:) = rand(n1+n2,1)*r.side;
 	r.race(1:n1) = 1;
 	r.race(n1+1:n1+n2) = 2;
 	r.racelog(1,:) = r.race;

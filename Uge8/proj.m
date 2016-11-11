@@ -1,6 +1,6 @@
 %% Initial conditions
 % change these to other values (only numbers) and see what happens!
-stor = 100;			% size of the (square) board
+side = 100;			% size of the (square) board
 tend = 75;			% number of iterations to run for
 r.dot_size = 15;	% Size of the dots for the graphics
 
@@ -36,9 +36,9 @@ close all
 % 4: secondary panic r1
 % 5: sick r1
 % 6: hunting r2
-r.resetTime 	= [	t_f1, 		t_f2, 		t_panik,...
-					t_pp, 		t_syg, 		t_fol];
-r.Hast 			= [	v_f1, 		v_f2, 		s_panik*v_f1,...
+r.resetTime 	= [	t_f1, 			t_f2, 			t_panik,...
+					t_pp, 			t_syg, 			t_fol];
+r.speed 		= [	v_f1, 			v_f2, 			s_panik*v_f1,...
 				 	s_panik*v_f1, 	s_sick*v_f1, 	v_f2];
 				 % This is the cosine of the angle for the field of vision
 r.vis 			= [	0, 	1/sqrt(2),	0, ...
@@ -46,7 +46,7 @@ r.vis 			= [	0, 	1/sqrt(2),	0, ...
 r.col 			= [ 'g','r','b','c','m','k'];
 r.r1rad 		= [r_panik, r_syg, r_die,r_pp];
 r.r2rad			= r_fol;
-r.stor			= stor;
+r.side			= side;
 
 dt = 1;
 r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2);
@@ -91,7 +91,7 @@ for i = 2:tend
 
 	% Edgecases are checked. If they meet the edge, they're reflected
 	[r.vel, r.pos] = edgecase(r.vel, r.pos, ...
-									rlast, stor, dt);
+									rlast, side, dt);
 
 	% Delete the last iterations scatter plots, plot the new ones and pause
 	% the simulation.
@@ -99,6 +99,7 @@ for i = 2:tend
 	p = plotter(r,1,p);
 	r.rvlast = r.rv;
 	r.rvlenlast = r.rvlen;
+	r.racelog(i,:) = r.race;
 end
 % For printing the figures to .png files
 % q = q+1;
