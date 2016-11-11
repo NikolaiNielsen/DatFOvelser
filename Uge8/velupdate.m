@@ -1,8 +1,5 @@
 function r = velupdate(r)
 
-	% Load the vel array, so we don't accidentally set them to 0.
-	% vel = r.vel(:,:);
-
 	% Loop over the array to check which velocities needs updating
 	for in = 1:length(r.t);
 
