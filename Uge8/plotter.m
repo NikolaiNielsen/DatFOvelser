@@ -13,5 +13,9 @@ function p = plotter(r,del,p)
 	p.r4 = scatter(r.pos(1,r.race == 4),r.pos(2,r.race == 4),r.dot_size,r.col(4),'filled');
 	p.r5 = scatter(r.pos(1,r.race == 5),r.pos(2,r.race == 5),r.dot_size,r.col(5),'filled');
 	p.r6 = scatter(r.pos(1,r.race == 6),r.pos(2,r.race == 6),r.dot_size,r.col(6),'filled');
+	if del ~= 1
+		legend('R1 base','R2 base','R1 panic','R1 panic 2','R1 sick','R2 hunting','location','eastoutside')
+		axis([0 r.stor 0 r.stor])
+	end
 	drawnow
 end
