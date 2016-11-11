@@ -78,8 +78,9 @@ for i = 2:tend
 	rlast = r.pos;
 
 
-	r.rv = rvec(rlast);
-	r.rvlen = rvlen(r.rv);
+	% r.rv = rvec(rlast);
+	% r.rvlen = rvlen(r.rv);
+	r = rv(r);
  	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in direction happens)
@@ -97,7 +98,6 @@ for i = 2:tend
 
 	% new position for individuals. Simple first order Euler integration
 	r.pos = rlast+r.vel*r.dt;
-	% r = nextstep(r,rlast);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
 	r = edgecase(r,rlast);
