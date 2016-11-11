@@ -89,7 +89,7 @@ for i = 2:tend
 
 
 	% new position for individuals. Simple first order Euler integration
-	r.pos = nextstep(rlast,r.vel,r.dt);
+	r = nextstep(r,rlast);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
 	% [r.vel,r.pos] = edgecase(r.vel,r.pos,rlast,r.side,r.dt);
