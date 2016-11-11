@@ -28,7 +28,11 @@ t_fol = 10;			% steps an r2 cell follows an r1 cell
 
 %% Initialize the simulation.
 % You shouldn't edit below this line, unless you know what you're doing.
+
+% Closes all previous figures. Mostly for debugging purposes where the simulation is run multiple
+% times and I'm too lazy to close them after each run.
 close all
+
 % Vectors corresponding to the times and speeds of states.
 % 1: healthy r1
 % 2: normal r2
@@ -69,13 +73,16 @@ for i = 2:tend
 	% 	print(sprintf('plot%d',q),'-dpng')
 	% end
 
+	% Stores the last position in a separate array. It's used for getting the next position and
+	% checking edgecases. For some reason, when I put it in the r struct, edgecases misbehaves.
 	rlast = r.pos;
+
+
 	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
  	r = statechange(r);
 
-	% counting down the time variable towards 0 (where a change in
-	% direction happens)
+	% counting down the time variable towards 0 (where a change in direction happens)
 	r.t = r.t-1;
 
 	% Logic array of which cells need updated velocities
@@ -99,8 +106,8 @@ for i = 2:tend
 	% the simulation.
 	title(sprintf('%d',i))
 	p = plotter(r,1,p);
-	r.rvlast = r.rv;
-	r.rvlenlast = r.rvlen;
+	% r.rvlast = r.rv;
+	% r.rvlenlast = r.rvlen;
 end
 % For printing the figures to .png files
 % q = q+1;
