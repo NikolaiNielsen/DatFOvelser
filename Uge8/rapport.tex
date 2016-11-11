@@ -1,0 +1,134 @@
+% Nikolai Nielsens "Fysiske Fag" preamble
+\documentclass[a4paper,10pt]{article} 	% A4 papir, 10pt størrelse
+
+\usepackage{Nikolai} 					% Min hjemmelavede pakke
+\renewcommand{\konj}{^*}
+\makeindex
+
+% Margen
+\usepackage[margin=1.5in]{geometry}
+
+% Max antal kolonner i en matrix. Default er 10
+%\setcounter{MaxMatrixCols}{20}
+
+% Hvor dybt skal kapitler labeles?
+%\setcounter{secnumdepth}{4}	
+%\setcounter{tocdepth}{4}
+
+
+% Hvilket nummer skal der startes med i sections? (n-1)
+%\setcounter{section}{0}	
+
+% Til nummerering af ligninger. Så der står (afsnit.ligning) og ikke bare (ligning)
+\numberwithin{equation}{section}
+
+% Header
+%\usepackage{fancyhdr}
+%\head{Nikolai Plambech Nielsen, 21-06-95\\Dato:. Klasse 5.C - De Fysiske Fag}
+%\pagestyle{fancy}
+
+%Titel
+\title{% 
+	Datalogi for Fysikere 2016/2017, Eksamensprojekt\\
+	\large Simpelt "spil" mellem to racer af vekselvirkende individer}
+\author{Nikolai Plambech Nielsen, LPK331}
+
+\begin{document}
+
+	\selectlanguage{danish}
+	
+	\maketitle
+	\newpage
+	
+	\section{Introduktion}
+	Dette er en rapport over eksamensprojektet i DatF (Datalogi for Fysikere), 2016/2017. Eksamensprojektet går ud på at simulere en verden, hvor der lever to forskellige racer, der bekriger hinanden. Race 1 fungerer som en slags bytte for race 2, der jæger disse, men som i specifikke tilfælde kan blive dræbt af individer af race 1.0.
+	
+	Reglerne for simulationen er som følger: Begge racer bevæger sig med konstant hastighed i et tidsrum (race 1 bevæger sig hurtigere end race 2, og i længere tid). Når dette tidsrum er gået, skifter de retning på tilfældig vis, og fortsætter med samme konstante hastighed. Dette er basistilstanden for hver race. For race 1 gælder yderligere:
+	\begin{itemize}
+		\item Individerne har et synsfelt på $ \pm 90 $\Deg.
+		\item Hvis de ser et individ af race 2, inden for en bestemt afstand (kaldet r\_panik), går de i panik, drejer sig 180\Deg og bevæger sig dermed i modsat retning, nu med dobbelt hastighed.
+		\item Hvis de ser et individ af race 1, som samtidig er i panik, går de selv i en slags ">sekundær"< panik. De bevæger sig med dobbelt hastighed i en tilfældig retning (og de kan dermed risikere at løbe ind i et race 2 individ).
+		\item Hvis et race 2 individ kommer inden for en given radius (mindre end panikradius), og race 1 individet et inden for race 2 individets synsfelt, så bliver race 1 individet syg, hvorefter det bevæger sig med 1.5 gange den normale hastighed i et tidsrum, inden individet bliver transformeret til et race 2 individ.
+		\item Hvis et race 2 individ kommer inden for en endnu mindre radius, og race 2 individet kan se race 1 individet, så bliver race 1 individet transformeret med det sammen. Hvis \textit{ikke} race 2 individet kan se race 1 individet, transformeres race 2 individet til et race 1 individ.
+	\end{itemize}
+
+	For race 2 gælder
+	\begin{itemize}
+		\item Individerne har et synsfelt på $ \pm 45 $\Deg.
+		\item Hvis et race 2 individ ser et race 1 individ inden for en given radius (større end race 1s panikradius), begynder de at jage dette individ. Hvis der er flere individer, der opfylder dette krav, vælges det individ, der er tættest på.
+	\end{itemize}
+	Fælles gælder også, at efter et givent tidsrum i en tilstand, for eksempel panik, vil individet gå tilbage til sin basistilstand (ud over for syge race 1 individer, der bliver til race 2 individer efter sygdomsperioden). Hvis et individ ydermere kommer ud til kanten af verden, skal de reflekteres ind igen.
+	
+	Forholdet mellem afstande er sådan, at 
+	\begin{equation*}
+		\text{Jage} > \text{Panik} > \text{Sekundær panik} > \text{Syg} > \text{Død}
+	\end{equation*}
+	Så først vil race 2 begynde at jage race 1, hvorefter race 1 går i panik. Tættere på går eventuelle andre race 1 individer i panik, og endnu tættere på bliver race 1 syg. Aller tættest på transformerer et individ (alt efter om race 2 ser race 1 eller ej).
+	
+	
+	Formålet med denne rapport er at dokumentere projektet. Hvad projektet går ud på, implementering af selve simulationen og dennes regler, brugen af koden samt mit syn på forløbet.
+	
+	
+	\section{Beskrivelse af programmet}
+	\begin{itemize}
+		\item Hvordan virker det?
+		\item Hvordan bruges det?
+		\item Hvilke begrænsninger har modellen?
+	\end{itemize}
+	Programmet virker ved at have en række matricer, hvori informationerne om hvert individ er dokumenteret. Herunder matricer for position, hastighed, tilstand og lignende. Disse matricer bruges af programmet til at foretage beslutninger om, hvad der skal ske i simulationen. 
+	
+	Én iteration af simulationen foregår ved, at der først ses på individernes indbyrdes positioner, for at se om deres tilstand skal ændres fra én tilstand til en anden, som beskrevet ovenfor, enten ved at de er inden for en given radius og synsfelt, eller at de har tilbragt et givent tidsrum i tilstanden.
+	
+	Efter dette tjek opdateres individernes position ud fra deres hastighedsvektorer, ved simpel Eulerintegration:
+	\begin{equation*}
+		\V{r}(t = t_0+ \ud t) = \V{r}(t=t_0) + \V{v} \ud t
+	\end{equation*}
+	Når den nye position er udregnet, tjekkes det om nogen individer er nået ud over spillepladen, hvormed deres hastighedsvektor og positionsvektor skal opdateres, således at de reflekteres og forbliver inde på spillepladen.
+	
+	Efter alle disse ting opdateres grafikken og én iteration er gennemført. Inden første iteration indlæses alle startbetingelser (tilfældig startposition og retning). Når disse er genereret og al relevant data er indlæst startes grafikken med startbetingelserne, og den første iteration påbegyndes.
+	
+	Denne simulation stopper efter et givent antal iterationer er udført, bestemt af brugeren i starten af programfilen.
+	
+	\subsection{Sådan køres programmet}
+	For at køre programmet skal MATLAB være installeret på din computer, og du skal have alle programfilerne (de 10 filer med endelsen ">.m"<). Når du har sikret dig dette, skal du dobbeltklikke på filen ">proj.m"<, der er hovedfilen. Dette åbner filen i MATLAB. Når MATLAB er åbnet skal du klikke på knappen ">run"<, der har en grøn trekant, som peger mod højre som ikon (som en play-knap på en DVD eller Bluray afspiller). Se figuren herunder for hjælp.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{img/run.png}
+		\caption{tryk på knappen ">Run"<.}
+		\label{fig:run}
+	\end{figure}
+	
+	Hvis der popper en boks op, som ligner den på figuren herunder, skal du bare trykke på ">change folder"<. Denne popper op fordi MATLAB til at starte med kun kigger i sin startmappe, og når man prøver at køre et program uden fra startmappen, så skal MATLAB lige være sikker på, at man vil skifte til en anden mappe, inden den vil lade dig køre programmet.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=10cm]{img/folder.png}
+		\caption{tryk på knappen ">Change Folder"<.}
+		\label{fig:folder}
+	\end{figure}
+	
+	Når du har trykket på ">run"< (og eventuelt ">change folder"<) starter simulationen. Efter et kort stykke tid vil der åbnes et vindue der ligner dem i afsnittet ">Eksempel på simulation"<, og simulationen vises i dette vindue.
+	
+	Hvis du vil ændre på startbetingelserne i programmet, skal du i MATLABs editor ændre på de linjer der står op ved toppen af programfilen. Ud fra hver linje står der et procenttegn, efterfulgt af noget tekst, der beskriver, hvad hver linje gør.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=12cm]{img/editor.png}
+		\caption{MATLABs editor. Du kan frit ændre på tallene i denne sektion kaldet ">initial conditions"<.}
+		\label{fig_editor}
+	\end{figure}
+	
+	
+	\section{Eksempel på simulation}
+	\begin{itemize}
+		\item Inkluder forskellige figurer, der viser situationer fra tidsudviklingen.
+	\end{itemize}
+
+
+	\section{Opsummering}
+	\begin{itemize}
+		\item dit perspektiv på opgaven og dens resultat.
+	\end{itemize}
+	
+
+\end{document}
+
