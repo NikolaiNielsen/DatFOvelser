@@ -1,4 +1,3 @@
-% function [vel,pos] = edgecase(vel,pos,pos1,side,dt)
 function r = edgecase(r,pos1)
 	oob = r.pos <= 0 | r.pos >= r.side;
 

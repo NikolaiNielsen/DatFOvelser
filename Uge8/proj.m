@@ -44,6 +44,7 @@ r.resetTime 	= [	t_f1, 			t_f2, 			t_panic,...
 					t_pp, 			t_syg, 			t_fol];
 r.speed 		= [	v_f1, 			v_f2, 			s_panic*v_f1,...
 				 	s_panic*v_f1, 	s_sick*v_f1, 	v_f2];
+
 				 % This is the cosine of the angle for the field of vision
 r.vis 			= [	0, 	1/sqrt(2),	0, ...
 					0, 	0, 	1/sqrt(2)];
@@ -110,3 +111,24 @@ end
 % For printing the figures to .png files
 % q = q+1;
 % print(sprintf('plot%d',q),'-dpng')
+
+%% Editor stuff
+% Functions used:
+% init
+% plotter
+% rv
+% statechange
+% time
+% velupdate
+% edgecase
+
+% Things that needs to be done
+% Check comments in proj
+% comment in init
+% comment in time
+% describe timeywimey stuff
+% comment in rv
+% describe velupdate
+% Describe edgecase
+% comment in plotter
+% comment in statechange
