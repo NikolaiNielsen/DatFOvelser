@@ -1,6 +1,6 @@
 %% Initial conditions
 % change these to other values (only numbers) and see what happens!
-stor = 100;			% size of the (square) board
+side = 100;			% size of the (square) board
 tend = 75;			% number of iterations to run for
 r.dot_size = 15;	% Size of the dots for the graphics
 
@@ -8,9 +8,9 @@ r.dot_size = 15;	% Size of the dots for the graphics
 n1 = 50;			% number of individuals of race 1
 v_f1 = 0.5;			% Normal speed for race 1
 t_f1 = 10;			% num steps a race 1 cell moves in a given direction
-r_panik = 10;		% panic radius for race 1, should be smaller than r_f2
-t_panik = 15;		% panic time for race 1
-s_panik = 2;		% Speed when panicing (primary and secondary)
+r_panic = 10;		% panic radius for race 1, should be smaller than r_f2
+t_panic = 15;		% panic time for race 1
+s_panic = 2;		% Speed when panicing (primary and secondary)
 r_pp = 5;			% secondary panic radius
 t_pp = 10;			% secondary panic time
 r_syg = 3;			% sickness radius
@@ -36,20 +36,22 @@ close all
 % 4: secondary panic r1
 % 5: sick r1
 % 6: hunting r2
-r.resetTime 	= [	t_f1, 		t_f2, 		t_panik,...
-					t_pp, 		t_syg, 		t_fol];
-r.Hast 			= [	v_f1, 		v_f2, 		s_panik*v_f1,...
-				 	s_panik*v_f1, 	s_sick*v_f1, 	v_f2];
+r.resetTime 	= [	t_f1, 			t_f2, 			t_panic,...
+					t_pp, 			t_syg, 			t_fol];
+r.speed 		= [	v_f1, 			v_f2, 			s_panic*v_f1,...
+				 	s_panic*v_f1, 	s_sick*v_f1, 	v_f2];
 				 % This is the cosine of the angle for the field of vision
 r.vis 			= [	0, 	1/sqrt(2),	0, ...
 					0, 	0, 	1/sqrt(2)];
 r.col 			= [ 'g','r','b','c','m','k'];
-r.r1rad 		= [r_panik, r_syg, r_die,r_pp];
+r.r1rad 		= [r_panic, r_syg, r_die,r_pp];
 r.r2rad			= r_fol;
-r.stor			= stor;
+r.side			= side;
+r.n 			= [n1,n2];
+r.dt = 1;
 
-dt = 1;
-r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2);
+
+r = init(r);
 
 figure('position',[20,20,550,550],'OuterPosition',[100,100,750,600])
 hold on
@@ -66,6 +68,7 @@ for i = 2:tend
 	% 	q = q+1;
 	% 	print(sprintf('plot%d',q),'-dpng')
 	% end
+
 	rlast = r.pos;
 	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
@@ -82,16 +85,15 @@ for i = 2:tend
 	[r.t,r.race] = tid(r);
 
 	% update the direction and velocity
-	r.vel(:,:) = velupdate(r);
-
+	r.vel = velupdate(r);
 
 
 	% new position for individuals. Simple first order Euler integration
 	r.pos = nextstep(rlast,r.vel,dt);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
-	[r.vel, r.pos] = edgecase(r.vel, r.pos, ...
-									rlast, stor, dt);
+	% [r.vel,r.pos] = edgecase(r.vel,r.pos,rlast,r.side,r.dt);
+	r = edgecase(r,rlast);
 
 	% Delete the last iterations scatter plots, plot the new ones and pause
 	% the simulation.

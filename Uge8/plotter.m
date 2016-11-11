@@ -15,7 +15,7 @@ function p = plotter(r,del,p)
 	p.r6 = scatter(r.pos(1,r.race == 6),r.pos(2,r.race == 6),r.dot_size,r.col(6),'filled');
 	if del ~= 1
 		legend('R1 base','R2 base','R1 panic','R1 panic 2','R1 sick','R2 hunting','location','eastoutside')
-		axis([0 r.stor 0 r.stor])
+		axis([0 r.side 0 r.side])
 	end
 	drawnow
 end

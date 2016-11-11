@@ -11,18 +11,18 @@ function vel = velupdate(r)
 		if r.tally(1,in)
 			r.dir(in) = rand()*2*pi;
 			% Get the speed from the array of reference speeds.
-			vel(1,in) = r.Hast(r.race(in)) * cos(r.dir(in));
-			vel(2,in) = r.Hast(r.race(in)) * sin(r.dir(in));
+			vel(1,in) = r.speed(r.race(in)) * cos(r.dir(in));
+			vel(2,in) = r.speed(r.race(in)) * sin(r.dir(in));
 		end
 		% If it's on the hunt we update the vector all the time.
 		if r.race(in) == 6
 			% We get the victim ID
 			victim = r.chase(in);
 
-			% We divide the separation vector with its length to obtain a unit vector, then scale it with r.Hast(6) for the appropriate velocity
+			% We divide the separation vector with its length to obtain a unit vector, then scale it with r.speed(6) for the appropriate velocity
 			dirvector = r.rv(:,victim,in);
 			dirlength = r.rvlen(victim,in);
-			vel(:,in) = dirvector*r.Hast(6)/dirlength;
+			vel(:,in) = dirvector*r.speed(6)/dirlength;
 		end
 	end
 end

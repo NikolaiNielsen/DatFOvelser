@@ -19,7 +19,7 @@ function r = statechange(r)
 					% cell dies
 					if r.rvlen(in,out) <= r.r1rad(3)
 						% Calculates the cosine of the angle between v2 and r21, to check whether 1 is in 2's fov.
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 2;
 							r.t(in) = r.resetTime(newrace);
@@ -35,10 +35,10 @@ function r = statechange(r)
 					% Cell gets sick
 					elseif r.rvlen(in,out) <= r.r1rad(2);
 						% Calculates the cosine of the angle between v2 and r21, to check whether 1 is in 2's fov.
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 5;
-							r.vel(:,in) = -r.Hast(newrace)*r.vel(:,in);
+							r.vel(:,in) = -r.speed(newrace)*r.vel(:,in);
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
@@ -46,10 +46,10 @@ function r = statechange(r)
 					% Cell panics
 					elseif r.rvlen(in,out) <= r.r1rad(1)
 						% Calculates the cosine of the angle between v1 and r12, to check whether 2 is in 1's fov.
-						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.Hast(inRace));
+						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.speed(inRace));
 						if cosang >= r.vis(inRace)
 							newrace = 3;
-							r.vel(:,in) = -r.Hast(newrace)*r.vel(:,in);
+							r.vel(:,in) = -r.speed(newrace)*r.vel(:,in);
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
@@ -58,14 +58,14 @@ function r = statechange(r)
 				elseif outRace == 3
 					if r.rvlen(in,out) <= r.r1rad(4)
 						% Calculates the cosine of the angle between v1 and r12, to check whether 2 is in 1's fov.
-						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.Hast(inRace));
+						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.speed(inRace));
 						if cosang >= r.vis(inRace)
 							newrace = 4;
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							r.dir(in) = rand()*2*pi;
-							vel(1,in) = r.Hast(newrace) * cos(r.dir(in));
-							vel(2,in) = r.Hast(newrace) * sin(r.dir(in));
+							vel(1,in) = r.speed(newrace) * cos(r.dir(in));
+							vel(2,in) = r.speed(newrace) * sin(r.dir(in));
 							break;
 						end
 					end
@@ -82,7 +82,7 @@ function r = statechange(r)
 			if num ~= 0
 				for out = 1:n
 					if distvicts(out)
-						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.Hast(inRace));
+						cosang = (dot(vin,r.rv(:,out,in)))/(r.rvlen(in,out)*r.speed(inRace));
 						if cosang >= r.vis(inRace)
 							contesters(1,end+1) = dists(out);
 							contesters(2,end+1) = out;
@@ -108,7 +108,7 @@ function r = statechange(r)
 					% cell dies
 					if r.rvlen(in,out) <= r.r1rad(3)
 						% Calculates the cosine of the angle between v2 and r21, to check whether 1 is in 2's fov.
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 2;
 							r.t(in) = r.resetTime(newrace);
@@ -125,10 +125,10 @@ function r = statechange(r)
 					% Cell gets sick but doesn't turn around
 					elseif r.rvlen(in,out) <= r.r1rad(2);
 						% Calculates the cosine of the angle between v2 and r21, to check whether 1 is in 2's fov.
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 5;
-							r.vel(:,in) = (r.Hast(newrace)/r.Hast(inRace))*r.vel(:,in);
+							r.vel(:,in) = (r.speed(newrace)/r.speed(inRace))*r.vel(:,in);
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
@@ -146,7 +146,7 @@ function r = statechange(r)
 				if outRace == 2 || outRace == 6
 					% cell dies
 					if r.rvlen(in,out) <= r.r1rad(3)
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 2;
 							r.t(in) = r.resetTime(newrace);
@@ -161,10 +161,10 @@ function r = statechange(r)
 						end
 					% Cell gets sick, but doesn't turn around
 					elseif r.rvlen(in,out) <= r.r1rad(2);
-						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.Hast(outRace));
+						cosang = (dot(vout,r.rv(:,in,out)))/(r.rvlen(in,out)*r.speed(outRace));
 						if cosang >= r.vis(outRace)
 							newrace = 5;
-							r.vel(:,in) = (r.Hast(newrace)/r.Hast(inRace))*r.vel(:,in);
+							r.vel(:,in) = (r.speed(newrace)/r.speed(inRace))*r.vel(:,in);
 							r.t(in) = r.resetTime(newrace);
 							r.race(in) = newrace;
 							break;
