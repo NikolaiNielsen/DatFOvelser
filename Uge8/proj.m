@@ -1,4 +1,4 @@
-%% Initial conditions 
+%% Initial conditions
 % change these to other values (only numbers) and see what happens!
 stor = 100;			% size of the (square) board
 tend = 75;			% number of iterations to run for
@@ -10,13 +10,13 @@ v_f1 = 0.5;			% Normal speed for race 1
 t_f1 = 10;			% num steps a race 1 cell moves in a given direction
 r_panik = 10;		% panic radius for race 1, should be smaller than r_f2
 t_panik = 15;		% panic time for race 1
-s_panik = 2;
+s_panik = 2;		% Speed when panicing (primary and secondary)
 r_pp = 5;			% secondary panic radius
 t_pp = 10;			% secondary panic time
 r_syg = 3;			% sickness radius
 t_syg = 15;			% Sickness time
-s_sick = 1.5;
-r_die = 1;			% distance between race 1 and 2, where race 1 dies 
+s_sick = 1.5;		% Speed when sick
+r_die = 1;			% distance between race 1 and 2, where race 1 dies
 					% (if 1 is in 2s fov, otherwise 2 dies)
 
 % For race 2:
@@ -26,7 +26,7 @@ t_f2 = 3;			% time for race 2
 r_fol = 15;			% vision radius for race 2.
 t_fol = 10;			% steps an r2 cell follows an r1 cell
 
-%% Initialize the simulation. 
+%% Initialize the simulation.
 % You shouldn't edit below this line, unless you know what you're doing.
 close all
 % Vectors corresponding to the times and speeds of states.
@@ -49,7 +49,7 @@ r.r2rad			= r_fol;
 r.stor			= stor;
 
 dt = 1;
-r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2,stor);
+r = init(r,n1,n2,v_f1,v_f2,t_f1,t_f2);
 
 figure('position',[20,20,550,550],'OuterPosition',[100,100,750,600])
 hold on
@@ -62,10 +62,10 @@ title(sprintf('%d',1))
 
 for i = 2:tend
 	% For printing the figures to .png files
-	if i == 26 || i == 51 || i == 76
-		q = q+1;
-		print(sprintf('plot%d',q),'-dpng')
-	end
+	% if i == 26 || i == 51 || i == 76
+	% 	q = q+1;
+	% 	print(sprintf('plot%d',q),'-dpng')
+	% end
 	rlast = r.pos;
 	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
