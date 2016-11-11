@@ -1,7 +1,7 @@
 %% Initial conditions 
 % change these to other values (only numbers) and see what happens!
 stor = 100;			% size of the (square) board
-tend = 100;			% number of iterations to run for
+tend = 75;			% number of iterations to run for
 r.dot_size = 15;	% Size of the dots for the graphics
 
 % For race 1:
@@ -28,7 +28,7 @@ t_fol = 10;			% steps an r2 cell follows an r1 cell
 
 %% Initialize the simulation. 
 % You shouldn't edit below this line, unless you know what you're doing.
-
+close all
 % Vectors corresponding to the times and speeds of states.
 % 1: healthy r1
 % 2: normal r2
@@ -43,7 +43,7 @@ r.Hast 			= [	v_f1, 		v_f2, 		s_panik*v_f1,...
 				 % This is the cosine of the angle for the field of vision
 r.vis 			= [	0, 	1/sqrt(2),	0, ...
 					0, 	0, 	1/sqrt(2)];
-r.col 			= [ 'g','r','b','y','m','k'];
+r.col 			= [ 'g','r','b','c','m','k'];
 r.r1rad 		= [r_panik, r_syg, r_die,r_pp];
 r.r2rad			= r_fol;
 r.stor			= stor;
@@ -56,11 +56,19 @@ hold on
 p = plotter(r,0);
 title(sprintf('%d',1))
 
+% For printing the figures to .png files
+% q = 1
+% print(sprintf('plot%d',q),'-dpng')
+
 for i = 2:tend
+	% For printing the figures to .png files
+	if i == 26 || i == 51 || i == 76
+		q = q+1;
+		print(sprintf('plot%d',q),'-dpng')
+	end
 	rlast = r.pos;
 	r.rv = rvec(rlast);
 	r.rvlen = rvlen(r.rv);
-	% r2 = r;
  	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in
@@ -79,7 +87,6 @@ for i = 2:tend
 
 
 	% new position for individuals. Simple first order Euler integration
-	% r.pos(:,:,i) = r.pos(:,:,i-1) + r.vel*dt;
 	r.pos = nextstep(rlast,r.vel,dt);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
@@ -93,3 +100,6 @@ for i = 2:tend
 	r.rvlast = r.rv;
 	r.rvlenlast = r.rvlen;
 end
+% For printing the figures to .png files
+% q = q+1;
+% print(sprintf('plot%d',q),'-dpng')

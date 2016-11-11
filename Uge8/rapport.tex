@@ -2,8 +2,7 @@
 \documentclass[a4paper,10pt]{article} 	% A4 papir, 10pt størrelse
 
 \usepackage{Nikolai} 					% Min hjemmelavede pakke
-\renewcommand{\konj}{^*}
-\makeindex
+\usepackage[dvipsnames]{xcolor}
 
 % Margen
 \usepackage[margin=1.5in]{geometry}
@@ -70,11 +69,6 @@
 	
 	
 	\section{Beskrivelse af programmet}
-	\begin{itemize}
-		\item Hvordan virker det?
-		\item Hvordan bruges det?
-		\item Hvilke begrænsninger har modellen?
-	\end{itemize}
 	Programmet virker ved at have en række matricer, hvori informationerne om hvert individ er dokumenteret. Herunder matricer for position, hastighed, tilstand og lignende. Disse matricer bruges af programmet til at foretage beslutninger om, hvad der skal ske i simulationen. 
 	
 	Én iteration af simulationen foregår ved, at der først ses på individernes indbyrdes positioner, for at se om deres tilstand skal ændres fra én tilstand til en anden, som beskrevet ovenfor, enten ved at de er inden for en given radius og synsfelt, eller at de har tilbragt et givent tidsrum i tilstanden.
@@ -117,18 +111,40 @@
 		\label{fig_editor}
 	\end{figure}
 	
+	\subsection{Begrænsninger}
+	
+	
 	
 	\section{Eksempel på simulation}
-	\begin{itemize}
-		\item Inkluder forskellige figurer, der viser situationer fra tidsudviklingen.
-	\end{itemize}
+	Herunder vises en simulation der kører i 75 iterationer, og viser startbetingelserne, og så hvert 25. skridt.
+	\begin{figure}[H]
+		\centering
+		\begin{minipage}{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{img/plot1.png}
+		\end{minipage}
+		\begin{minipage}{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{img/plot2.png}
+		\end{minipage}
+		\begin{minipage}{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{img/plot3.png}
+		\end{minipage}
+		\begin{minipage}{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{img/plot4.png}
+		\end{minipage}
+	\caption{Tidsudvikling af simulationen. Race 1 i \textcolor{green}{basistilstand vises i grønt}, \textcolor{blue}{panik vises i blåt}, \textcolor{cyan}{sekundær panik vises i lyseblåt}, \textcolor{VioletRed}{sygdom vises i lyserødt}. Race 2 individer i \textcolor{red}{basistilstand vises i rødt} og jagt vises i sort.}
+	\end{figure}
 
 
 	\section{Opsummering}
-	\begin{itemize}
-		\item dit perspektiv på opgaven og dens resultat.
-	\end{itemize}
+	Jeg synes dette var en rigtig fin opgave, med nok at lave til, at man kunne bruge både sin viden om matematik og fysik, samt programmering. Man kunne implementere metoderne, som vi har fået introduceret i dette kursus, hvilket jeg også har prøvet på. Hen mod slutningen blev det klart sværere at lave alt vektoriseret, hvilket produktet også afspejler. I simulationen er det klart funktionen ">statechange"< der bruger længst computationstid (hvis der ses bort fra plots), og dette er en funktion, der overhovedet ikke er vektoriseret.
 	
+	Med mere tid ville jeg uden tvivl have vektoriseret denne funktion, samt inkluderet en gui, for at gøre programmet mere brugervenligt (dette kunne dog blive problematisk, når der er så mange knapper der kan skrues på, og ikke ubegrænset plads på skærmen).
+	
+	Men med den tid vi nu en gang havde, synes jeg det er blevet et rigtig godt produkt, hvor man virkelig har kunnet fordybe sig i det, og selv vælge hvordan og hvorledes det hele skal struktureres og udføres.
 
 \end{document}
 
