@@ -77,10 +77,10 @@ for i = 2:tend
 	% checking edgecases. For some reason, when I put it in the r struct, edgecases misbehaves.
 	rlast = r.pos;
 
-
-	% r.rv = rvec(rlast);
-	% r.rvlen = rvlen(r.rv);
+	% Calculate separation vectors between all cells, along with the length of these.
 	r = rv(r);
+
+	% Check whether or not a cells state should be changed, based on distances and fov's
  	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in direction happens)
@@ -90,7 +90,7 @@ for i = 2:tend
 	r.tally = r.t == 0;
 
 	% restart time counter
-	[r.t,r.race] = tid(r);
+	r = tid(r);
 
 	% update the direction and velocity
 	r.vel = velupdate(r);
