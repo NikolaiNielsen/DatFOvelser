@@ -90,10 +90,10 @@ for i = 2:tend
 	r.tally = r.t == 0;
 
 	% restart time counter
-	r = tid(r);
+	r = time(r);
 
 	% update the direction and velocity
-	r.vel = velupdate(r);
+	r = velupdate(r);
 
 
 	% new position for individuals. Simple first order Euler integration
