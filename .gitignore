@@ -11,6 +11,8 @@
 
 # And .m files
 !*.m
+!*.tex
+!*.png
 
 # And in all subdirectories
 !*/
