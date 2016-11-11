@@ -79,7 +79,7 @@ for i = 2:tend
 	r.t = r.t-1;
 
 	% Logic array of which cells need updated velocities
-	r.tally(1,:) = r.t == 0;
+	r.tally = r.t == 0;
 
 	% restart time counter
 	[r.t,r.race] = tid(r);
@@ -89,7 +89,7 @@ for i = 2:tend
 
 
 	% new position for individuals. Simple first order Euler integration
-	r.pos = nextstep(rlast,r.vel,dt);
+	r.pos = nextstep(rlast,r.vel,r.dt);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
 	% [r.vel,r.pos] = edgecase(r.vel,r.pos,rlast,r.side,r.dt);
