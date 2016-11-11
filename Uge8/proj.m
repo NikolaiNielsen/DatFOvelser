@@ -96,18 +96,16 @@ for i = 2:tend
 
 
 	% new position for individuals. Simple first order Euler integration
-	r = nextstep(r,rlast);
+	r.pos = rlast+r.vel*r.dt;
+	% r = nextstep(r,rlast);
 
 	% Edgecases are checked. If they meet the edge, they're reflected
-	% [r.vel,r.pos] = edgecase(r.vel,r.pos,rlast,r.side,r.dt);
 	r = edgecase(r,rlast);
 
 	% Delete the last iterations scatter plots, plot the new ones and pause
 	% the simulation.
 	title(sprintf('%d',i))
 	p = plotter(r,1,p);
-	% r.rvlast = r.rv;
-	% r.rvlenlast = r.rvlen;
 end
 % For printing the figures to .png files
 % q = q+1;
