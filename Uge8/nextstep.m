@@ -1,4 +1,4 @@
-function pos = nextstep(pos1,vel,dt)
-	pos = pos1+vel*dt;
+function r = nextstep(r,lastpos)
+	r.pos = lastpos+r.vel*r.dt;
 
 end

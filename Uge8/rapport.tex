@@ -5,7 +5,7 @@
 \usepackage[dvipsnames]{xcolor}
 
 % Margen
-\usepackage[margin=1.5in]{geometry}
+\usepackage[margin=1.4in]{geometry}
 
 % Max antal kolonner i en matrix. Default er 10
 %\setcounter{MaxMatrixCols}{20}
@@ -112,7 +112,9 @@
 	\end{figure}
 	
 	\subsection{Begrænsninger}
+	Der er selvfølgelig flere forskellige begrænsninger ved denne model, men det kommer helt og aldeles an på, hvad man prøver at modellere. Hvis det er komplekst liv, man prøver at modellere, så er det ikke en særlig realistisk model. For eksempel bør individer måske ikke bare ændre retning diskontinuert til en ny, tilfældig retning. Der bør også være noget acceleration, da overgangen fra basistilstand til panik for race 1 (eksempelvis) medfører en uendelig acceleration, der bestemt ikke er realistisk. Ydermere er det en firkantet spilleplade, hvor individer bare reflekteres som var de lysstråler (indgangsvinklen er lig udgangsvinklen i forhold til fladenormalen). Det er klart den mest enkle måde at gøre det på, men ikke særlig realistisk.
 	
+	Man kan altid prøve at gøre det mere realistisk, men man er nødt til at lave nogle antagelser og på et eller andet punkt stoppe, så simulationen stadig kan køre i et ordentligt tidsrum.
 	
 	
 	\section{Eksempel på simulation}

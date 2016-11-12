@@ -1,15 +1,12 @@
-function [t,race] = tid(r)
-	t = r.t;
-	race = r.race;
+function r = tid(r)
 	for i = 1:length(r.race);
 		if r.tally(1,i)
-			if race(i) == 3 || race(i) == 4
-				race(i) = 1;
-			elseif race(i) == 5 || race(i) == 6
-				race(i) = 2;
+			if r.race(i) == 3 || r.race(i) == 4
+				r.race(i) = 1;
+			elseif r.race(i) == 5 || r.race(i) == 6
+				r.race(i) = 2;
 			end
-			t(i) = r.resetTime(r.race(i));
+			r.t(i) = r.resetTime(r.race(i));
 		end
 	end
-
 end
