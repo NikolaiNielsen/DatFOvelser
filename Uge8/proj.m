@@ -89,16 +89,18 @@ for i = 2:tend
  	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in direction
-	% happens)
+	% happens).
 	r.t = r.t-1;
 
 	% Logic array of which cells need updated velocities
 	r.tally = r.t == 0;
 
-	% restart time counter
+	% restart time counter. Each state has a resetTime which, when it reaches
+	% 0, this function resets the time (and changes the state, if it's a
+	% panicing, sick or hunting cell).
 	r = time(r);
 
-	% update the direction and velocity
+	% update the direction and velocity for cells whose time was just 0.
 	r = velupdate(r);
 
 
@@ -126,9 +128,3 @@ end
 % time
 % velupdate
 % edgecase
-
-% Things that needs to be done
-% Check comments in proj
-% comment in time
-% describe timeywimey stuff
-% comment in statechange
