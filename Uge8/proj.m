@@ -2,7 +2,7 @@
 % change these to other values (only numbers) and see what happens!
 side = 100;			% size of the (square) board
 tend = 75;			% number of iterations to run for
-r.dot_size = 15;	% Size of the dots for the graphics
+r.dot_size = 0.5;		% Size of the dots for the graphics
 
 % For race 1:
 n1 = 50;			% number of individuals of race 1
