@@ -124,7 +124,6 @@ end
 
 % Things that needs to be done
 % Check comments in proj
-% comment in init
 % comment in time
 % describe timeywimey stuff
 % comment in rv
