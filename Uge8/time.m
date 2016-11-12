@@ -4,21 +4,17 @@ function r = time(r)
 	% for the cells (if r.t == 0). If this is the case the resetTime for the
 	% given race is loaded into the time counter.
 
-	% Iterate over the cells and check if a reset is needed
-	for i = 1:length(r.race);
-		if r.tally(1,i)
+	% A vector of the resetTimes for the cells that need updating.
+	newtimes = r.tally.*r.resetTime(r.race);
+	% We just add it to r.t, as all newtimes == 0 is r.t ~= 0 and vice versa.
+	r.t = r.t+newtimes;
 
-			% If it's r1 panic or secondary panic we revert to r1 base state
-			if r.race(i) == 3 || r.race(i) == 4
-				r.race(i) = 1;
+	% All panicing cells that need updating. Revert to r1 base state
+	newRace1 = r.tally & (r.race == 3 | r.race == 4);
+	r.race(newRace1) = 1;
 
-			% If it's r1 sick or r2 hunting we revert to r2 base state
-			elseif r.race(i) == 5 || r.race(i) == 6
-				r.race(i) = 2;
-			end
+	% Same as above, but for sick r1 and hunting r2. Revert to r2 base.
+	newRace2 = r.tally & (r.race == 5 | r.race == 6);
+	r.race(newRace2) = 2;
 
-			% Also, we reset the time
-			r.t(i) = r.resetTime(r.race(i));
-		end
-	end
 end
