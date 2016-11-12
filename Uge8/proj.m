@@ -29,8 +29,9 @@ t_fol = 10;			% steps an r2 cell follows an r1 cell
 %% Initialize the simulation.
 % You shouldn't edit below this line, unless you know what you're doing.
 
-% Closes all previous figures. Mostly for debugging purposes where the simulation is run multiple
-% times and I'm too lazy to close them after each run.
+% Closes all previous figures. Mostly for debugging purposes where the
+% simulation is run multiple times and I'm too lazy to close them after each
+% run.
 close all
 
 % Vectors corresponding to the times and speeds of states.
@@ -74,17 +75,21 @@ for i = 2:tend
 	% 	print(sprintf('plot%d',q),'-dpng')
 	% end
 
-	% Stores the last position in a separate array. It's used for getting the next position and
-	% checking edgecases. For some reason, when I put it in the r struct, edgecases misbehaves.
+	% Stores the last position in a separate array. It's used for getting the
+	% next position and checking edgecases. For some reason, when I put it in
+	% the r struct, edgecases misbehaves.
 	rlast = r.pos;
 
-	% Calculate separation vectors between all cells, along with the length of these.
+	% Calculate separation vectors between all cells, along with the length of
+	% these.
 	r = rv(r);
 
-	% Check whether or not a cells state should be changed, based on distances and fov's
+	% Check whether or not a cells state should be changed, based on distances
+	% and fov's
  	r = statechange(r);
 
-	% counting down the time variable towards 0 (where a change in direction happens)
+	% counting down the time variable towards 0 (where a change in direction
+	% happens)
 	r.t = r.t-1;
 
 	% Logic array of which cells need updated velocities

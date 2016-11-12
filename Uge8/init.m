@@ -1,7 +1,8 @@
 function r = init(r)
 	% This function takes care of all the initial conditions of the simulation.
-	% It creates n1+n2 cells, n1 of race 1 and n2 of race 2, gives them a random position, direction
-	% and velocity along this direction. It also sets the time counter to the correct values.
+	% It creates n1+n2 cells, n1 of race 1 and n2 of race 2, gives them a
+	% random position, direction and velocity along this direction. It also
+	% sets the time counter to the correct values.
 
 	n = r.n(1)+r.n(2);
 
