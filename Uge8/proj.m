@@ -56,24 +56,18 @@ r.side			= side;
 r.n 			= [n1,n2];
 r.dt = 1;
 
-
+% Load the initial conditions
 r = init(r);
 
+% Create the figure with the desired size to accomodate the legend
 figure('position',[20,20,550,550],'OuterPosition',[100,100,750,600])
 hold on
+% plot the initial positions and update the title.
 p = plotter(r,0);
 title(sprintf('%d',1))
 
-% For printing the figures to .png files
-% q = 1
-% print(sprintf('plot%d',q),'-dpng')
-
+% The main iterations
 for i = 2:tend
-	% For printing the figures to .png files
-	% if i == 26 || i == 51 || i == 76
-	% 	q = q+1;
-	% 	print(sprintf('plot%d',q),'-dpng')
-	% end
 
 	% Stores the last position in a separate array. It's used for getting the
 	% next position and checking edgecases. For some reason, when I put it in
@@ -86,7 +80,7 @@ for i = 2:tend
 
 	% Check whether or not a cells state should be changed, based on distances
 	% and fov's
- 	r = statechange(r);
+	r = statechange(r);
 
 	% counting down the time variable towards 0 (where a change in direction
 	% happens).
@@ -115,9 +109,6 @@ for i = 2:tend
 	title(sprintf('%d',i))
 	p = plotter(r,1,p);
 end
-% For printing the figures to .png files
-% q = q+1;
-% print(sprintf('plot%d',q),'-dpng')
 
 %% Editor stuff
 % Functions used:
