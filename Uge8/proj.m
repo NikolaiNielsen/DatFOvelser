@@ -131,8 +131,5 @@ end
 % Check comments in proj
 % comment in time
 % describe timeywimey stuff
-% comment in rv
 % describe velupdate
-% Describe edgecase
-% comment in plotter
 % comment in statechange
