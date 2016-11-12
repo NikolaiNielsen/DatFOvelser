@@ -7,8 +7,7 @@ function r = init(r)
 	n = r.n(1)+r.n(2);
 
 	% The starting positions.
-	r.start(1,:) = rand(n,1)*r.side;
-	r.start(2,:) = rand(n,1)*r.side;
+	r.start = rand(2,n)*r.side;
 	% Setting the races
 	r.race(1:r.n(1)) = 1;
 	r.race(r.n(1)+1:n) = 2;
