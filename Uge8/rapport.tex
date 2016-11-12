@@ -5,7 +5,7 @@
 \usepackage[dvipsnames]{xcolor}
 
 % Margen
-\usepackage[margin=1.4in]{geometry}
+\usepackage[margin=1.3in]{geometry}
 
 % Max antal kolonner i en matrix. Default er 10
 %\setcounter{MaxMatrixCols}{20}
@@ -23,21 +23,28 @@
 
 % Header
 %\usepackage{fancyhdr}
-%\head{Nikolai Plambech Nielsen, 21-06-95\\Dato:. Klasse 5.C - De Fysiske Fag}
+%\cfoot{\thepage}
 %\pagestyle{fancy}
 
 %Titel
 \title{% 
 	Datalogi for Fysikere 2016/2017, Eksamensprojekt\\
-	\large Simpelt "spil" mellem to racer af vekselvirkende individer}
+	\large Simulation af to racer af vekselvirkende individer}
 \author{Nikolai Plambech Nielsen, LPK331}
 
 \begin{document}
 
 	\selectlanguage{danish}
 	
-	\maketitle
+	\clearpage\maketitle
+	\thispagestyle{empty}
+	\vspace{2cm}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{img/front.png}
+	\end{figure}
 	\newpage
+	\setcounter{page}{1}
 	
 	\section{Introduktion}
 	Dette er en rapport over eksamensprojektet i DatF (Datalogi for Fysikere), 2016/2017. Eksamensprojektet går ud på at simulere en verden, hvor der lever to forskellige racer, der bekriger hinanden. Race 1 fungerer som en slags bytte for race 2, der jæger disse, men som i specifikke tilfælde kan blive dræbt af individer af race 1.0.
@@ -67,7 +74,6 @@
 	
 	Formålet med denne rapport er at dokumentere projektet. Hvad projektet går ud på, implementering af selve simulationen og dennes regler, brugen af koden samt mit syn på forløbet.
 	
-	
 	\section{Beskrivelse af programmet}
 	Programmet virker ved at have en række matricer, hvori informationerne om hvert individ er dokumenteret. Herunder matricer for position, hastighed, tilstand og lignende. Disse matricer bruges af programmet til at foretage beslutninger om, hvad der skal ske i simulationen. 
 	
@@ -84,7 +90,7 @@
 	Denne simulation stopper efter et givent antal iterationer er udført, bestemt af brugeren i starten af programfilen.
 	
 	\subsection{Sådan køres programmet}
-	For at køre programmet skal MATLAB være installeret på din computer, og du skal have alle programfilerne (de 10 filer med endelsen ">.m"<). Når du har sikret dig dette, skal du dobbeltklikke på filen ">proj.m"<, der er hovedfilen. Dette åbner filen i MATLAB. Når MATLAB er åbnet skal du klikke på knappen ">run"<, der har en grøn trekant, som peger mod højre som ikon (som en play-knap på en DVD eller Bluray afspiller). Se figuren herunder for hjælp.
+	For at køre programmet skal MATLAB (testet på version R2016a) være installeret på din computer, og du skal have alle programfilerne (de 8\footnote{edgecase.m, init.m, plotter.m, projekt.m, rv.m, statechange.m, time.m \& velupdate.m} filer med endelsen ">.m"<). Når du har sikret dig dette, skal du dobbeltklikke på filen ">projekt.m"<, der er hovedfilen. Dette åbner filen i MATLAB. Når MATLAB er åbnet skal du klikke på knappen ">run"<, der har en grøn trekant, som peger mod højre som ikon (som en play-knap på en DVD eller Bluray afspiller). Se figuren herunder for hjælp.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\textwidth]{img/run.png}
@@ -102,7 +108,7 @@
 	
 	Når du har trykket på ">run"< (og eventuelt ">change folder"<) starter simulationen. Efter et kort stykke tid vil der åbnes et vindue der ligner dem i afsnittet ">Eksempel på simulation"<, og simulationen vises i dette vindue.
 	
-	Hvis du vil ændre på startbetingelserne i programmet, skal du i MATLABs editor ændre på de linjer der står op ved toppen af programfilen. Ud fra hver linje står der et procenttegn, efterfulgt af noget tekst, der beskriver, hvad hver linje gør.
+	Hvis du vil ændre på startbetingelserne i programmet, skal du i MATLABs editor ændre på tallene i de linjer, der står op ved toppen af programfilen. Ud fra hver linje står der et procenttegn, efterfulgt af noget tekst, der beskriver, hvad hver linje gør.
 	
 	\begin{figure}[H]
 		\centering
@@ -116,7 +122,7 @@
 	
 	Man kan altid prøve at gøre det mere realistisk, men man er nødt til at lave nogle antagelser og på et eller andet punkt stoppe, så simulationen stadig kan køre i et ordentligt tidsrum.
 	
-	
+	\newpage
 	\section{Eksempel på simulation}
 	Herunder vises en simulation der kører i 75 iterationer, og viser startbetingelserne, og så hvert 25. skridt.
 	\begin{figure}[H]

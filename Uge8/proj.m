@@ -1,7 +1,7 @@
 %% Initial conditions
 % change these to other values (only numbers) and see what happens!
 side = 100;			% size of the (square) board
-tend = 75;			% number of iterations to run for
+tend = 100;			% number of iterations to run for
 r.dot_size = 0.5;		% Size of the dots for the graphics
 
 % For race 1:
