@@ -131,5 +131,4 @@ end
 % Check comments in proj
 % comment in time
 % describe timeywimey stuff
-% describe velupdate
 % comment in statechange

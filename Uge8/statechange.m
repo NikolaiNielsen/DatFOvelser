@@ -1,4 +1,5 @@
 function r = statechange(r)
+
 	% The purpose of this function is to calculate the field of vision for the
 	% different cells.
 	% The way this is done is by using the dot product of the separation vector

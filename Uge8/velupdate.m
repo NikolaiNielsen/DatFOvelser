@@ -1,5 +1,8 @@
 function r = velupdate(r)
 
+	% This function updates the direction and velocities for the cells that
+	% need updating. Race 2 hunters needs updating all the time.
+
 	% Loop over the array to check which velocities needs updating
 	for in = 1:length(r.t);
 
@@ -11,6 +14,7 @@ function r = velupdate(r)
 			r.vel(1,in) = r.speed(r.race(in)) * cos(r.dir(in));
 			r.vel(2,in) = r.speed(r.race(in)) * sin(r.dir(in));
 		end
+
 		% If it's on the hunt we update the vector all the time.
 		if r.race(in) == 6
 			% We get the victim ID
